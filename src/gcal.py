@@ -34,7 +34,31 @@ def get_client() -> "CalendarResource":
     return cast("CalendarResource", service)
 
 
-def booking_to_event(booking: Booking) -> "Event":
+def booking_to_html(booking: Booking, s3_url: str | None = None) -> str:
+    """Convert a booking to HTML format for display."""
+    html = "<div class='booking'>"
+    html += "<h3>BPMA Track Booking</h3>"
+    html += f"<p><strong>Date:</strong> {booking.date.strftime('%A, %B %d, %Y')}</p>"
+
+    if isinstance(booking.time, str):
+        html += f"<p><strong>Time:</strong> {booking.time}</p>"
+    else:
+        start_time = booking.time.start.strftime("%H:%M")
+        end_time = booking.time.end.strftime("%H:%M")
+        html += f"<p><strong>Time:</strong> {start_time} - {end_time}</p>"
+
+    if booking.event_type:
+        html += f"<p><strong>Event Type:</strong> {booking.event_type}</p>"
+    if booking.any_other_info:
+        html += f"<p><strong>Additional Info:</strong> {booking.any_other_info}</p>"
+    if s3_url:
+        html += f"<p><strong>Source Image:</strong> {s3_url}</p>"
+
+    html += "</div>"
+    return html
+
+
+def booking_to_event(booking: Booking, s3_url: str | None = None) -> "Event":
     title = "BPMA Track booked"
     if isinstance(booking.time, str):
         title += f" ({booking.time})"
@@ -57,13 +81,13 @@ def booking_to_event(booking: Booking) -> "Event":
     return {
         "summary": title,
         "location": "Battersea Park Millennium Arena",
-        "description": booking.model_dump_json(indent=2),
+        "description": booking_to_html(booking, s3_url),
         "start": cast("EventDateTime", start),
         "end": cast("EventDateTime", end),
     }
 
 
-def push_bookings_to_calendar(bookings: Bookings, id_: str) -> None:
+def push_bookings_to_calendar(bookings: Bookings, id_: str, s3_url: str | None = None) -> None:
     if not CALENDAR_ID:
         raise ValueError("CALENDAR_ID environment variable is not set")
     service = get_client()
@@ -82,7 +106,7 @@ def push_bookings_to_calendar(bookings: Bookings, id_: str) -> None:
     batch = service.new_batch_http_request()
     for i, booking in enumerate(bookings.bookings):
         logger.info(f"Adding booking to batch: {booking}")
-        event = booking_to_event(booking)
+        event = booking_to_event(booking, s3_url)
         event["extendedProperties"] = metadata
 
         batch.add(service.events().insert(calendarId=CALENDAR_ID, body=event), callback=callback, request_id=str(i))
@@ -101,3 +125,7 @@ def delete_all_events():
         if event_id := event.get("id"):
             logger.info(f"Deleting event: {event.get('summary', 'Unknown')}")
             service.events().delete(calendarId=CALENDAR_ID, eventId=event_id).execute()
+
+
+if __name__ == "__main__":
+    delete_all_events()
