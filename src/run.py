@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 from src.extract.google_ import extract_bookings_from_url
 from src.gcal import push_bookings_to_calendar
-from src.scrape import URL, get_img_urls
+from src.scrape import URL, get_track_img_urls
 
 logger = logging.getLogger(__name__)
 BUCKET = os.getenv("S3_BUCKET_NAME")
@@ -62,7 +62,7 @@ def get_content_store_s3(url: str) -> tuple[str, str] | None:
 
 def run():
     logger.info("Starting run function")
-    img_urls = get_img_urls(URL)
+    img_urls = get_track_img_urls(URL)
     logger.info(f"Retrieved {len(img_urls)} image URLs")
     if len(img_urls) != 1:
         raise ValueError(f"Expected 1 image URL, found {len(img_urls)}: {img_urls}")
