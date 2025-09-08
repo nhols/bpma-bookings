@@ -24,6 +24,23 @@ class Booking(BaseModel):
     event_type: str | None = None
     any_other_info: str | None = None
 
+    @property
+    def booking_id(self) -> str:
+        """A unique identifier for the booking, based on its JSON representation."""
+        return self.model_dump_json()
+
 
 class Bookings(BaseModel):
     bookings: list[Booking]
+
+    @property
+    def range(self) -> int:
+        """
+        Get the number of days between the first and last booking.
+        """
+        if not self.bookings:
+            return 0
+
+        from_date = min(booking.date for booking in self.bookings)
+        to_date = max(booking.date for booking in self.bookings)
+        return (to_date - from_date).days + 1

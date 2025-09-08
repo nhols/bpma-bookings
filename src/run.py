@@ -13,10 +13,12 @@ if TYPE_CHECKING:
 
 from src.extract.google_ import extract_bookings_from_url
 from src.gcal import push_bookings_to_calendar
+from src.increment import increment_bookings
 from src.scrape import URL, get_img_urls
 
 logger = logging.getLogger(__name__)
 BUCKET = os.getenv("S3_BUCKET_NAME")
+MAX_DAYS = 30 * 4  # ~ 4 months
 
 
 def get_ext_content_type(url: str) -> tuple[str, str]:
@@ -55,7 +57,6 @@ def get_content_store_s3(url: str) -> tuple[str, str] | None:
             return None
         raise
 
-    # Construct the S3 object URL
     s3_url = f"https://{BUCKET}.s3.amazonaws.com/{key}"
     return id_, s3_url
 
@@ -81,8 +82,11 @@ def run():
     if bookings is None or len(bookings.bookings) == 0:
         raise ValueError(f"No bookings found for url {img_url}")
 
-    # TODO update/delete existing events?
-    push_bookings_to_calendar(bookings, id_, s3_url)
+    if bookings.range > MAX_DAYS:
+        raise ValueError(f"Bookings range too large: {bookings.range} days, max is {MAX_DAYS}")
+
+    incremented = increment_bookings(bookings)
+    push_bookings_to_calendar(incremented, id_, s3_url)
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING, cast
+from zoneinfo import ZoneInfo
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -13,7 +14,8 @@ if TYPE_CHECKING:
 from src.bookings import Booking, Bookings
 
 logger = logging.getLogger(__name__)
-CALENDAR_ID = os.getenv("CALENDAR_ID")
+CALENDAR_ID = os.environ["CALENDAR_ID"]
+
 TZ = "Europe/London"
 
 
@@ -58,7 +60,7 @@ def booking_to_html(booking: Booking, s3_url: str | None = None) -> str:
     return html
 
 
-def booking_to_event(booking: Booking, s3_url: str | None = None) -> "Event":
+def booking_to_event(booking: Booking, s3_url: str | None = None, source_id: str | None = None) -> "Event":
     title = "BPMA Track booked"
     if isinstance(booking.time, str):
         title += f" ({booking.time})"
@@ -78,20 +80,21 @@ def booking_to_event(booking: Booking, s3_url: str | None = None) -> "Event":
             "dateTime": end_dt.isoformat(),
             "timeZone": TZ,
         }
+    private_props = {"booking_id": booking.booking_id}
+    if source_id:
+        private_props["source_id"] = source_id
     return {
         "summary": title,
         "location": "Battersea Park Millennium Arena",
         "description": booking_to_html(booking, s3_url),
         "start": cast("EventDateTime", start),
         "end": cast("EventDateTime", end),
+        "extendedProperties": {"private": private_props},
     }
 
 
 def push_bookings_to_calendar(bookings: Bookings, id_: str, s3_url: str | None = None) -> None:
-    if not CALENDAR_ID:
-        raise ValueError("CALENDAR_ID environment variable is not set")
     service = get_client()
-    metadata = {"private": {"booking_id": id_}}
 
     if not bookings.bookings:
         logger.info("No bookings to push to calendar")
@@ -106,18 +109,56 @@ def push_bookings_to_calendar(bookings: Bookings, id_: str, s3_url: str | None =
     batch = service.new_batch_http_request()
     for i, booking in enumerate(bookings.bookings):
         logger.info(f"Adding booking to batch: {booking}")
-        event = booking_to_event(booking, s3_url)
-        event["extendedProperties"] = metadata
-
+        event = booking_to_event(booking, s3_url, id_)
         batch.add(service.events().insert(calendarId=CALENDAR_ID, body=event), callback=callback, request_id=str(i))
 
     logger.info(f"Executing batch request with {len(bookings.bookings)} events")
     batch.execute()
 
 
+def list_events(from_date: datetime.date, to_date: datetime.date) -> list["Event"]:
+    service = get_client()
+
+    tz = ZoneInfo(TZ)
+    time_min = datetime.datetime.combine(from_date, datetime.time.min, tzinfo=tz).isoformat()
+    time_max = datetime.datetime.combine(to_date, datetime.time.min, tzinfo=tz).isoformat()
+
+    logger.info(f"Listing events from {time_min} to {time_max}")
+    events_result = (
+        service.events()
+        .list(
+            calendarId=CALENDAR_ID,
+            timeMin=time_min,
+            timeMax=time_max,
+            singleEvents=True,
+            orderBy="startTime",
+        )
+        .execute()
+    )
+    return events_result.get("items", [])
+
+
+def delete_events(event_ids: list[str]) -> None:
+    service = get_client()
+
+    def callback(request_id, response, exception):
+        if exception is not None:
+            logger.error(f"Error deleting event for request {request_id}: {exception}")
+        else:
+            logger.info(f"Successfully deleted event with ID: {request_id}")
+
+    batch = service.new_batch_http_request()
+    for event_id in event_ids:
+        logger.info(f"Adding delete request to batch for event ID: {event_id}")
+        batch.add(
+            service.events().delete(calendarId=CALENDAR_ID, eventId=event_id), callback=callback, request_id=event_id
+        )
+
+    logger.info(f"Executing batch delete request with {len(event_ids)} events")
+    batch.execute()
+
+
 def delete_all_events():
-    if not CALENDAR_ID:
-        raise ValueError("CALENDAR_ID environment variable is not set")
     service = get_client()
 
     events = service.events().list(calendarId=CALENDAR_ID).execute()
@@ -125,7 +166,3 @@ def delete_all_events():
         if event_id := event.get("id"):
             logger.info(f"Deleting event: {event.get('summary', 'Unknown')}")
             service.events().delete(calendarId=CALENDAR_ID, eventId=event_id).execute()
-
-
-if __name__ == "__main__":
-    delete_all_events()
