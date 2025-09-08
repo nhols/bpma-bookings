@@ -20,7 +20,7 @@ eval:
 	PYTHONPATH=. uv run src/eval/run.py
 
 # Build Docker image for AWS Lambda (Docker v2 schema manifest)
-build:
+build: ecr-login
 	docker buildx build \
 		--platform linux/amd64 \
 		--push \
