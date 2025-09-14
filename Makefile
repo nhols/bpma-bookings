@@ -51,6 +51,8 @@ deploy: build push-ecr update-lambda
 # Show available commands
 help:
 	@echo "Available commands:"
+	@echo "  run           Run the main application"
+	@echo "  eval          Run LLM evaluation"
 	@echo "  push-ssm      Push environment variables to AWS SSM Parameter Store"
 	@echo "  build         Build Docker image locally"
 	@echo "  ecr-login     Login to ECR"

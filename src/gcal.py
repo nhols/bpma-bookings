@@ -3,10 +3,10 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING, cast
-from zoneinfo import ZoneInfo
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from zoneinfo import ZoneInfo
 
 if TYPE_CHECKING:
     from googleapiclient._apis.calendar.v3 import CalendarResource, Event, EventDateTime
@@ -61,7 +61,7 @@ def booking_to_html(booking: Booking, s3_url: str | None = None) -> str:
 
 
 def booking_to_event(booking: Booking, s3_url: str | None = None, source_id: str | None = None) -> "Event":
-    title = "BPMA Track booked"
+    title = booking.event_type or "BPMA Track booked"
     if isinstance(booking.time, str):
         title += f" ({booking.time})"
         start = {
