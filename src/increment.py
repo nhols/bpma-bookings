@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def increment_bookings(new_bookings: Bookings) -> Bookings:
     """
-    A set of bookings is assumed to cover the full range of the months in which the bookings occur.
+    A set of bookings is assumed to cover the full range of the dates covered by the bookings.
 
     Any existing bookings in that range which are not in the new set will be deleted.
 
@@ -28,7 +28,7 @@ def increment_bookings(new_bookings: Bookings) -> Bookings:
         Bookings: The subset of `new_bookings` which are not already in the calendar.
     """
 
-    from_to = bookings_from_to(new_bookings)
+    from_to = bookings_min_max_dates(new_bookings)
     if from_to is None:
         return Bookings(bookings=[])
 
@@ -55,6 +55,15 @@ def get_booking_id(event: "Event") -> str | None:
     return event.get("extendedProperties", {}).get("private", {}).get("booking_id")
 
 
+def bookings_min_max_dates(bookings: Bookings) -> tuple[datetime.date, datetime.date] | None:
+    if not bookings.bookings:
+        return None
+
+    min_date = min(booking.date for booking in bookings.bookings)
+    max_date = max(booking.date for booking in bookings.bookings)
+    return min_date, max_date
+
+
 def bookings_from_to(bookings: Bookings) -> tuple[datetime.date, datetime.date] | None:
     """
     Args:
@@ -69,8 +78,10 @@ def bookings_from_to(bookings: Bookings) -> tuple[datetime.date, datetime.date] 
     if not bookings.bookings:
         return None
 
-    min_date = min(booking.date for booking in bookings.bookings)
-    max_date = max(booking.date for booking in bookings.bookings)
+    min_max_date = bookings_min_max_dates(bookings)
+    if min_max_date is None:
+        return None
+    min_date, max_date = min_max_date
     from_date = min_date.replace(day=1)
     to_date = (max_date.replace(day=1) + datetime.timedelta(days=32)).replace(day=1)
     logger.info(f"Bookings cover from {from_date} to {to_date}")

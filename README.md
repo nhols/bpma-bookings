@@ -11,13 +11,12 @@ Use an LLM to extract track bookings for BPMA (Battersea Park Millennium Arena) 
 7. **Deploy & schedule** - Run as AWS Lambda function for automated processing
 
 ### Incrementality
-A new bookings image is assumed to be a complete replacement for any bookings in the months it covers. For example, if an image contains bookings for January and February:
-- any existing events in the calendar for January and February that do not appear in the new bookings will be deleted
-- any new events that do not appear in the calendar will be inserted
-- identical events will be left unchanged
-- any events in other months (e.g. March) will be unaffected.
+A new bookings image is assumed to be a complete replacement for any bookings in the range of dates the bookings cover
 
-This logic is based on the `min` and `max` dates found in the extracted bookings. For example, if the extracted bookings contain dates `2023-01-15`, `2023-01-20`, and `2023-02-10`, the system will consider the date range to be from `2023-01-01` to `2023-03-01`. All existing calendar events within this range are subject to incrementality checks and could be deleted.
+When new bookings are observed, we load calendar events between the min and max dates of the new bookings and take the following actions:
+- No action for new bookings that already have a corresponding calendar event
+- We create a new calendar event for bookings that do not already have a corresponding calendar event
+- We delete calendar events that are not represented in the new bookings
 
 ## Setup
 
