@@ -32,6 +32,7 @@ class ProcessingStatus(StrEnum):
 @dataclass(frozen=True)
 class ContentStoreResult:
     id_: str
+    key: str
     s3_url: str
     should_process: bool
     processing_status: ProcessingStatus | None
@@ -63,6 +64,7 @@ def get_ext_content_type(url: str) -> tuple[str, str]:
 
 def put_processing_status(client: "S3Client", key: str, status: ProcessingStatus) -> None:
     bucket = get_bucket_name()
+    logger.info(f"Tagging s3://{bucket}/{key} with {PROCESSING_STATUS_TAG}={status.value}")
     client.put_object_tagging(
         Bucket=bucket,
         Key=key,
@@ -99,6 +101,7 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
         )
         return ContentStoreResult(
             id_=id_,
+            key=key,
             s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
             should_process=True,
             processing_status=None,
@@ -107,18 +110,12 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
         if e.response.get("Error", {}).get("Code") == "PreconditionFailed":
             logger.info("Object already exists in s3")
             status = get_processing_status(client, key)
-            if status == ProcessingStatus.COMPLETED:
-                return ContentStoreResult(
-                    id_=id_,
-                    s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
-                    should_process=False,
-                    processing_status=status,
-                )
-
+            logger.info("Object status: %s", status)
             return ContentStoreResult(
                 id_=id_,
+                key=key,
                 s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
-                should_process=True,
+                should_process=status != ProcessingStatus.COMPLETED,
                 processing_status=status,
             )
         raise
@@ -155,13 +152,11 @@ def run():
         push_bookings_to_calendar(incremented, result.id_, result.s3_url)
     except Exception:
         client: "S3Client" = boto3.client("s3")
-        key = result.s3_url.rsplit("/", 1)[-1]
-        put_processing_status(client, key, ProcessingStatus.FAILED)
+        put_processing_status(client, result.key, ProcessingStatus.FAILED)
         raise
 
     client = boto3.client("s3")
-    key = result.s3_url.rsplit("/", 1)[-1]
-    put_processing_status(client, key, ProcessingStatus.COMPLETED)
+    put_processing_status(client, result.key, ProcessingStatus.COMPLETED)
 
 
 if __name__ == "__main__":

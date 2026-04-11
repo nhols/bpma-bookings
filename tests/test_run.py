@@ -64,6 +64,7 @@ class RunTests(unittest.TestCase):
             result,
             ContentStoreResult(
                 id_=expected_id,
+                key=f"{expected_id}.png",
                 s3_url=f"https://test-bucket.s3.amazonaws.com/{expected_id}.png",
                 should_process=False,
                 processing_status=ProcessingStatus.COMPLETED,
@@ -107,6 +108,7 @@ class RunTests(unittest.TestCase):
             result,
             ContentStoreResult(
                 id_=expected_id,
+                key=f"{expected_id}.png",
                 s3_url=f"https://test-bucket.s3.amazonaws.com/{expected_id}.png",
                 should_process=True,
                 processing_status=ProcessingStatus.FAILED,
@@ -135,6 +137,7 @@ class RunTests(unittest.TestCase):
         mock_get_img_urls.return_value = ["https://example.com/image.png"]
         mock_get_content_store_s3.return_value = ContentStoreResult(
             id_="source-id",
+            key="source-id.png",
             s3_url="https://bucket.s3.amazonaws.com/source-id.png",
             should_process=True,
             processing_status=None,
@@ -153,6 +156,7 @@ class RunTests(unittest.TestCase):
             fake_client.put_tagging_calls[-1]["Tagging"]["TagSet"],
             [{"Key": "processing_status", "Value": "completed"}],
         )
+        self.assertEqual(fake_client.put_tagging_calls[-1]["Key"], "source-id.png")
 
     @patch("src.run.boto3.client")
     @patch("src.run.extract_bookings_from_url")
@@ -170,6 +174,7 @@ class RunTests(unittest.TestCase):
         mock_get_img_urls.return_value = ["https://example.com/image.png"]
         mock_get_content_store_s3.return_value = ContentStoreResult(
             id_="source-id",
+            key="source-id.png",
             s3_url="https://bucket.s3.amazonaws.com/source-id.png",
             should_process=True,
             processing_status=ProcessingStatus.FAILED,
@@ -183,6 +188,7 @@ class RunTests(unittest.TestCase):
             fake_client.put_tagging_calls[-1]["Tagging"]["TagSet"],
             [{"Key": "processing_status", "Value": "failed"}],
         )
+        self.assertEqual(fake_client.put_tagging_calls[-1]["Key"], "source-id.png")
 
     @patch("src.run.boto3.client")
     @patch("src.run.push_bookings_to_calendar")
@@ -203,6 +209,7 @@ class RunTests(unittest.TestCase):
         mock_get_img_urls.return_value = ["https://example.com/image.png"]
         mock_get_content_store_s3.return_value = ContentStoreResult(
             id_="source-id",
+            key="source-id.png",
             s3_url="https://bucket.s3.amazonaws.com/source-id.png",
             should_process=False,
             processing_status=ProcessingStatus.COMPLETED,
