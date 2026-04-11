@@ -2,6 +2,8 @@ import hashlib
 import logging
 import mimetypes
 import os
+from dataclasses import dataclass
+from enum import StrEnum
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
@@ -19,6 +21,20 @@ from src.scrape import URL, get_img_urls
 logger = logging.getLogger(__name__)
 BUCKET = os.getenv("S3_BUCKET_NAME")
 MAX_DAYS = 30 * 4  # ~ 4 months
+PROCESSING_STATUS_TAG = "processing_status"
+
+
+class ProcessingStatus(StrEnum):
+    FAILED = "failed"
+    COMPLETED = "completed"
+
+
+@dataclass(frozen=True)
+class ContentStoreResult:
+    id_: str
+    s3_url: str
+    should_process: bool
+    processing_status: ProcessingStatus | None
 
 
 def get_ext_content_type(url: str) -> tuple[str, str]:
@@ -39,7 +55,24 @@ def get_ext_content_type(url: str) -> tuple[str, str]:
     return ext, content_type
 
 
-def get_content_store_s3(url: str) -> tuple[str, str] | None:
+def put_processing_status(client: "S3Client", key: str, status: ProcessingStatus) -> None:
+    client.put_object_tagging(
+        Bucket=BUCKET,
+        Key=key,
+        Tagging={"TagSet": [{"Key": PROCESSING_STATUS_TAG, "Value": status.value}]},
+    )
+
+
+def get_processing_status(client: "S3Client", key: str) -> ProcessingStatus | None:
+    response = client.get_object_tagging(Bucket=BUCKET, Key=key)
+    tags = {tag["Key"]: tag["Value"] for tag in response.get("TagSet", [])}
+    status = tags.get(PROCESSING_STATUS_TAG)
+    if status is None:
+        return None
+    return ProcessingStatus(status)
+
+
+def get_content_store_s3(url: str) -> ContentStoreResult:
     if not BUCKET:
         raise ValueError("`S3_BUCKET_NAME` environment variable is not set")
 
@@ -50,15 +83,38 @@ def get_content_store_s3(url: str) -> tuple[str, str] | None:
     key = f"{id_}{ext}"
 
     try:
-        client.put_object(Bucket=BUCKET, Key=key, Body=content, ContentType=content_type, IfNoneMatch="*")
+        client.put_object(
+            Bucket=BUCKET,
+            Key=key,
+            Body=content,
+            ContentType=content_type,
+            IfNoneMatch="*",
+        )
+        return ContentStoreResult(
+            id_=id_,
+            s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+            should_process=True,
+            processing_status=None,
+        )
     except client.exceptions.ClientError as e:
         if e.response.get("Error", {}).get("Code") == "PreconditionFailed":
             logger.info("Object already exists in s3")
-            return None
-        raise
+            status = get_processing_status(client, key)
+            if status == ProcessingStatus.COMPLETED:
+                return ContentStoreResult(
+                    id_=id_,
+                    s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+                    should_process=False,
+                    processing_status=status,
+                )
 
-    s3_url = f"https://{BUCKET}.s3.amazonaws.com/{key}"
-    return id_, s3_url
+            return ContentStoreResult(
+                id_=id_,
+                s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+                should_process=True,
+                processing_status=status,
+            )
+        raise
 
 
 def run():
@@ -72,21 +128,33 @@ def run():
     logger.info(f"Found image URL: {img_url}")
 
     result = get_content_store_s3(img_url)
-    if result is None:
-        logger.info("No new image, skipping")
+    if not result.should_process:
+        logger.info(f"Content already processed with ID: {result.id_}; skipping")
         return
 
-    id_, s3_url = result
-    logger.info(f"New content stored with ID: {id_} at URL: {s3_url}")
-    bookings = extract_bookings_from_url(img_url)
-    if bookings is None or len(bookings.bookings) == 0:
-        raise ValueError(f"No bookings found for url {img_url}")
+    logger.info(
+        f"Processing content with ID: {result.id_} at URL: {result.s3_url}"
+        f" (status={result.processing_status or 'unset'})"
+    )
+    try:
+        bookings = extract_bookings_from_url(img_url)
+        if bookings is None or len(bookings.bookings) == 0:
+            raise ValueError(f"No bookings found for url {img_url}")
 
-    if bookings.range > MAX_DAYS:
-        raise ValueError(f"Bookings range too large: {bookings.range} days, max is {MAX_DAYS}")
+        if bookings.range > MAX_DAYS:
+            raise ValueError(f"Bookings range too large: {bookings.range} days, max is {MAX_DAYS}")
 
-    incremented = increment_bookings(bookings)
-    push_bookings_to_calendar(incremented, id_, s3_url)
+        incremented = increment_bookings(bookings)
+        push_bookings_to_calendar(incremented, result.id_, result.s3_url)
+    except Exception:
+        client: "S3Client" = boto3.client("s3")
+        key = result.s3_url.rsplit("/", 1)[-1]
+        put_processing_status(client, key, ProcessingStatus.FAILED)
+        raise
+
+    client = boto3.client("s3")
+    key = result.s3_url.rsplit("/", 1)[-1]
+    put_processing_status(client, key, ProcessingStatus.COMPLETED)
 
 
 if __name__ == "__main__":
