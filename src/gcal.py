@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from typing import TYPE_CHECKING, cast
+from urllib.parse import urlencode
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 CALENDAR_ID = os.environ["CALENDAR_ID"]
 
 TZ = "Europe/London"
+ISSUES_URL = "https://github.com/nhols/bpma-bookings/issues/new"
 
 
 def get_client() -> "CalendarResource":
@@ -36,7 +38,26 @@ def get_client() -> "CalendarResource":
     return cast("CalendarResource", service)
 
 
-def booking_to_html(booking: Booking, s3_url: str | None = None) -> str:
+def get_issue_url(source_id: str | None = None, s3_url: str | None = None) -> str:
+    body_lines = [
+        "Something looks off with this BPMA booking event.",
+        "",
+        "Please describe the issue you spotted.",
+    ]
+    if source_id:
+        body_lines.extend(["", f"Source ID: {source_id}"])
+    if s3_url:
+        body_lines.extend(["", f"Source image: {s3_url}"])
+    query = urlencode(
+        {
+            "title": "Calendar booking issue",
+            "body": "\n".join(body_lines),
+        }
+    )
+    return f"{ISSUES_URL}?{query}"
+
+
+def booking_to_html(booking: Booking, s3_url: str | None = None, source_id: str | None = None) -> str:
     """Convert a booking to HTML format for display."""
     html = "<div class='booking'>"
     html += "<h3>BPMA Track Booking</h3>"
@@ -55,6 +76,10 @@ def booking_to_html(booking: Booking, s3_url: str | None = None) -> str:
         html += f"<p><strong>Additional Info:</strong> {booking.any_other_info}</p>"
     if s3_url:
         html += f"<p><strong>Source Image:</strong> {s3_url}</p>"
+    html += (
+        "<p><em>Something looks off? "
+        f"<a href='{get_issue_url(source_id, s3_url)}'>Raise an issue here</a>.</em></p>"
+    )
 
     html += "</div>"
     return html
@@ -86,7 +111,7 @@ def booking_to_event(booking: Booking, s3_url: str | None = None, source_id: str
     return {
         "summary": title,
         "location": "Battersea Park Millennium Arena",
-        "description": booking_to_html(booking, s3_url),
+        "description": booking_to_html(booking, s3_url, source_id),
         "start": cast("EventDateTime", start),
         "end": cast("EventDateTime", end),
         "extendedProperties": {"private": private_props},
