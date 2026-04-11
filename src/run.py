@@ -37,6 +37,12 @@ class ContentStoreResult:
     processing_status: ProcessingStatus | None
 
 
+def get_bucket_name() -> str:
+    if not BUCKET:
+        raise ValueError("`S3_BUCKET_NAME` environment variable is not set")
+    return BUCKET
+
+
 def get_ext_content_type(url: str) -> tuple[str, str]:
     parsed_url = urlparse(url)
     content_type, _ = mimetypes.guess_type(parsed_url.path)
@@ -56,15 +62,17 @@ def get_ext_content_type(url: str) -> tuple[str, str]:
 
 
 def put_processing_status(client: "S3Client", key: str, status: ProcessingStatus) -> None:
+    bucket = get_bucket_name()
     client.put_object_tagging(
-        Bucket=BUCKET,
+        Bucket=bucket,
         Key=key,
         Tagging={"TagSet": [{"Key": PROCESSING_STATUS_TAG, "Value": status.value}]},
     )
 
 
 def get_processing_status(client: "S3Client", key: str) -> ProcessingStatus | None:
-    response = client.get_object_tagging(Bucket=BUCKET, Key=key)
+    bucket = get_bucket_name()
+    response = client.get_object_tagging(Bucket=bucket, Key=key)
     tags = {tag["Key"]: tag["Value"] for tag in response.get("TagSet", [])}
     status = tags.get(PROCESSING_STATUS_TAG)
     if status is None:
@@ -73,8 +81,7 @@ def get_processing_status(client: "S3Client", key: str) -> ProcessingStatus | No
 
 
 def get_content_store_s3(url: str) -> ContentStoreResult:
-    if not BUCKET:
-        raise ValueError("`S3_BUCKET_NAME` environment variable is not set")
+    bucket = get_bucket_name()
 
     client: "S3Client" = boto3.client("s3")
     content = requests.get(url).content
@@ -84,7 +91,7 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
 
     try:
         client.put_object(
-            Bucket=BUCKET,
+            Bucket=bucket,
             Key=key,
             Body=content,
             ContentType=content_type,
@@ -92,7 +99,7 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
         )
         return ContentStoreResult(
             id_=id_,
-            s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+            s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
             should_process=True,
             processing_status=None,
         )
@@ -103,14 +110,14 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
             if status == ProcessingStatus.COMPLETED:
                 return ContentStoreResult(
                     id_=id_,
-                    s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+                    s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
                     should_process=False,
                     processing_status=status,
                 )
 
             return ContentStoreResult(
                 id_=id_,
-                s3_url=f"https://{BUCKET}.s3.amazonaws.com/{key}",
+                s3_url=f"https://{bucket}.s3.amazonaws.com/{key}",
                 should_process=True,
                 processing_status=status,
             )
