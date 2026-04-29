@@ -121,16 +121,8 @@ def get_content_store_s3(url: str) -> ContentStoreResult:
         raise
 
 
-def run():
-    logger.info("Starting run function")
-    img_urls = get_img_urls(URL)
-    logger.info(f"Retrieved {len(img_urls)} image URLs")
-    if len(img_urls) != 1:
-        raise ValueError(f"Expected 1 image URL, found {len(img_urls)}: {img_urls}")
-
-    img_url = img_urls[0]
-    logger.info(f"Found image URL: {img_url}")
-
+def process_img_url(img_url: str) -> None:
+    logger.info("Processing image URL: %s", img_url)
     result = get_content_store_s3(img_url)
     if not result.should_process:
         logger.info(f"Content already processed with ID: {result.id_}; skipping")
@@ -157,6 +149,17 @@ def run():
 
     client = boto3.client("s3")
     put_processing_status(client, result.key, ProcessingStatus.COMPLETED)
+
+
+def run():
+    logger.info("Starting run function")
+    img_urls = get_img_urls(URL)
+    logger.info(f"Retrieved {len(img_urls)} image URLs")
+    if not img_urls:
+        raise ValueError("Expected at least 1 image URL, found 0")
+
+    for img_url in img_urls:
+        process_img_url(img_url)
 
 
 if __name__ == "__main__":

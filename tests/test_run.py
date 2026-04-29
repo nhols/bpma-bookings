@@ -45,6 +45,11 @@ def sample_bookings() -> Bookings:
 
 
 class RunTests(unittest.TestCase):
+    def setUp(self):
+        self.bucket_patcher = patch("src.run.BUCKET", "test-bucket")
+        self.bucket_patcher.start()
+        self.addCleanup(self.bucket_patcher.stop)
+
     @patch("src.run.requests.get")
     @patch("src.run.boto3.client")
     def test_get_content_store_s3_skips_completed_content(self, mock_boto_client: Mock, mock_get: Mock):
@@ -157,6 +162,81 @@ class RunTests(unittest.TestCase):
             [{"Key": "processing_status", "Value": "completed"}],
         )
         self.assertEqual(fake_client.put_tagging_calls[-1]["Key"], "source-id.png")
+
+    @patch("src.run.boto3.client")
+    @patch("src.run.push_bookings_to_calendar")
+    @patch("src.run.increment_bookings")
+    @patch("src.run.extract_bookings_from_url")
+    @patch("src.run.get_content_store_s3")
+    @patch("src.run.get_img_urls")
+    def test_run_processes_multiple_images_in_order(
+        self,
+        mock_get_img_urls: Mock,
+        mock_get_content_store_s3: Mock,
+        mock_extract_bookings_from_url: Mock,
+        mock_increment_bookings: Mock,
+        mock_push_bookings_to_calendar: Mock,
+        mock_boto_client: Mock,
+    ):
+        first_bookings = sample_bookings()
+        second_bookings = Bookings(
+            bookings=[
+                Booking(
+                    date=datetime.date(2026, 5, 9),
+                    time="ALL DAY",
+                    event_type="Athletics Track",
+                )
+            ]
+        )
+        first_incremented = sample_bookings()
+        second_incremented = sample_bookings()
+        fake_client = FakeS3Client()
+        mock_boto_client.return_value = fake_client
+        mock_get_img_urls.return_value = [
+            "https://example.com/april.png",
+            "https://example.com/may.jpg",
+        ]
+        mock_get_content_store_s3.side_effect = [
+            ContentStoreResult(
+                id_="april-id",
+                key="april-id.png",
+                s3_url="https://bucket.s3.amazonaws.com/april-id.png",
+                should_process=True,
+                processing_status=None,
+            ),
+            ContentStoreResult(
+                id_="may-id",
+                key="may-id.jpg",
+                s3_url="https://bucket.s3.amazonaws.com/may-id.jpg",
+                should_process=True,
+                processing_status=None,
+            ),
+        ]
+        mock_extract_bookings_from_url.side_effect = [first_bookings, second_bookings]
+        mock_increment_bookings.side_effect = [first_incremented, second_incremented]
+
+        run()
+
+        self.assertEqual(
+            [call.args[0] for call in mock_get_content_store_s3.call_args_list],
+            ["https://example.com/april.png", "https://example.com/may.jpg"],
+        )
+        self.assertEqual(
+            [call.args[0] for call in mock_extract_bookings_from_url.call_args_list],
+            ["https://example.com/april.png", "https://example.com/may.jpg"],
+        )
+        self.assertEqual(
+            mock_push_bookings_to_calendar.call_args_list[0].args,
+            (first_incremented, "april-id", "https://bucket.s3.amazonaws.com/april-id.png"),
+        )
+        self.assertEqual(
+            mock_push_bookings_to_calendar.call_args_list[1].args,
+            (second_incremented, "may-id", "https://bucket.s3.amazonaws.com/may-id.jpg"),
+        )
+        self.assertEqual(
+            [call["Key"] for call in fake_client.put_tagging_calls],
+            ["april-id.png", "may-id.jpg"],
+        )
 
     @patch("src.run.boto3.client")
     @patch("src.run.extract_bookings_from_url")
