@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from bpma.sheet import LONDON, Booking
 
 REPO = "https://github.com/nhols/bpma-bookings"
+IMAGES = "https://raw.githubusercontent.com/nhols/bpma-bookings/master/data/sheets"
 SCOPE = "https://www.googleapis.com/auth/calendar.events"
 
 
@@ -94,10 +95,10 @@ def _body(booking: Booking) -> dict[str, object]:
             "timeZone": "Europe/London",
         }
         end = {"dateTime": dt.datetime.combine(booking.day, booking.slot.end).isoformat(), "timeZone": "Europe/London"}
-    sheet_url = f"{REPO}/tree/master/data/sheets/{booking.sheet_id}"
+    image_url = f"{IMAGES}/{booking.sheet_id}/{booking.image_name}"
     description = (
         f"Time on the sheet: {booking.time_as_printed or '(blank)'}\n"
-        f"Source sheet: {sheet_url}\n"
+        f"Source sheet: {image_url}\n"
         f"Something wrong? {REPO}/issues/new"
     )
     return {
