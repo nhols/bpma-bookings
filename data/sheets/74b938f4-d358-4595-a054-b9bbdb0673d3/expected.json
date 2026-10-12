@@ -1,0 +1,138 @@
+{
+  "title": "Athletics Track Bookings 2025 November-December",
+  "rows": [
+    {
+      "first_day": "2025-11-23",
+      "last_day": "2025-11-23",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-11-28",
+      "last_day": "2025-11-28",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "6AM-2PM",
+      "slots": [
+        {
+          "start": "06:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-11-30",
+      "last_day": "2025-11-30",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-12-01",
+      "last_day": "2025-12-01",
+      "weekday_as_printed": "MONDAY",
+      "time_as_printed": "7-9PM",
+      "slots": [
+        {
+          "start": "19:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-12-03",
+      "last_day": "2025-12-03",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "TRACK MAINTENANCE"
+    },
+    {
+      "first_day": "2025-12-04",
+      "last_day": "2025-12-04",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "TRACK MAINTENANCE"
+    },
+    {
+      "first_day": "2025-12-05",
+      "last_day": "2025-12-05",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "TRACK MAINTENANCE"
+    },
+    {
+      "first_day": "2025-12-06",
+      "last_day": "2025-12-06",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "RUNTHROUGH"
+    },
+    {
+      "first_day": "2025-12-16",
+      "last_day": "2025-12-16",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-12-25",
+      "last_day": "2025-12-25",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "-",
+      "slots": [],
+      "event_type": "CLOSED"
+    },
+    {
+      "first_day": "2025-12-26",
+      "last_day": "2025-12-26",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "-",
+      "slots": [],
+      "event_type": "CLOSED"
+    }
+  ]
+}

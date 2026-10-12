@@ -1,0 +1,200 @@
+{
+  "title": "Athletics Track Bookings 2025 September",
+  "rows": [
+    {
+      "first_day": "2025-09-06",
+      "last_day": "2025-09-06",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "8.30AM - 2PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-08",
+      "last_day": "2025-09-08",
+      "weekday_as_printed": "MONDAY",
+      "time_as_printed": "EVE",
+      "slots": [
+        {
+          "start": "17:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-10",
+      "last_day": "2025-09-10",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "EVE",
+      "slots": [
+        {
+          "start": "17:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK MEETING"
+    },
+    {
+      "first_day": "2025-09-11",
+      "last_day": "2025-09-11",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-14",
+      "last_day": "2025-09-14",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "8AM - 7PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "19:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-15",
+      "last_day": "2025-09-15",
+      "weekday_as_printed": "MONDAY",
+      "time_as_printed": "7AM - 10PM",
+      "slots": [
+        {
+          "start": "07:00:00",
+          "end": "22:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-16",
+      "last_day": "2025-09-16",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "7AM - 2PM",
+      "slots": [
+        {
+          "start": "07:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-17",
+      "last_day": "2025-09-17",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "1PM - 6PM",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "18:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-18",
+      "last_day": "2025-09-18",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "8AM - 5PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-19",
+      "last_day": "2025-09-19",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "8AM - 11AM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "11:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK FILMING"
+    },
+    {
+      "first_day": "2025-09-20",
+      "last_day": "2025-09-20",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "8AM - 7PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "19:00:00"
+        }
+      ],
+      "event_type": "24 HOUR RACE"
+    },
+    {
+      "first_day": "2025-09-21",
+      "last_day": "2025-09-21",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "8AM - 2PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "24 HOUR RACE"
+    },
+    {
+      "first_day": "2025-09-25",
+      "last_day": "2025-09-25",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE SCHOOL BOOKING"
+    },
+    {
+      "first_day": "2025-09-26",
+      "last_day": "2025-09-26",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "PM - EVE",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-27",
+      "last_day": "2025-09-27",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "8AM - 2PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    }
+  ]
+}

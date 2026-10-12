@@ -1,0 +1,172 @@
+{
+  "title": "Athletics Track Bookings 2025 September - October",
+  "rows": [
+    {
+      "first_day": "2025-09-25",
+      "last_day": "2025-09-25",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE SCHOOL BOOKING"
+    },
+    {
+      "first_day": "2025-09-26",
+      "last_day": "2025-09-26",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "PM - EVE",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-09-27",
+      "last_day": "2025-09-27",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "8AM - 2PM",
+      "slots": [
+        {
+          "start": "08:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-01",
+      "last_day": "2025-10-01",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "EVE",
+      "slots": [
+        {
+          "start": "17:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-02",
+      "last_day": "2025-10-02",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "WANDSWORTH MARATHON KIDS"
+    },
+    {
+      "first_day": "2025-10-08",
+      "last_day": "2025-10-08",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "7AM - 10PM",
+      "slots": [
+        {
+          "start": "07:00:00",
+          "end": "22:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-09",
+      "last_day": "2025-10-09",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "7AM - 2PM",
+      "slots": [
+        {
+          "start": "07:00:00",
+          "end": "14:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-14",
+      "last_day": "2025-10-14",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-17",
+      "last_day": "2025-10-17",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "1PM - 10PM",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "22:00:00"
+        }
+      ],
+      "event_type": "RUNTHROUGH"
+    },
+    {
+      "first_day": "2025-10-18",
+      "last_day": "2025-10-18",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "7AM - 4PM",
+      "slots": [
+        {
+          "start": "07:00:00",
+          "end": "16:00:00"
+        }
+      ],
+      "event_type": "RUNTHROUGH"
+    },
+    {
+      "first_day": "2025-10-21",
+      "last_day": "2025-10-21",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-24",
+      "last_day": "2025-10-24",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "TBA",
+      "slots": [],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-25",
+      "last_day": "2025-10-25",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "TBA",
+      "slots": [],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2025-10-26",
+      "last_day": "2025-10-26",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "TBA",
+      "slots": [],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    }
+  ]
+}

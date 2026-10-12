@@ -1,0 +1,100 @@
+{
+  "title": "Athletics Track Bookings March 2026",
+  "rows": [
+    {
+      "first_day": "2026-03-02",
+      "last_day": "2026-03-02",
+      "weekday_as_printed": "MONDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-03-04",
+      "last_day": "2026-03-04",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "11AM - 1:30PM 5:30 - 8:30PM",
+      "slots": [
+        {
+          "start": "11:00:00",
+          "end": "13:30:00"
+        },
+        {
+          "start": "17:30:00",
+          "end": "20:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-03-07",
+      "last_day": "2026-03-07",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "RUNTHROUGH"
+    },
+    {
+      "first_day": "2026-03-22",
+      "last_day": "2026-03-22",
+      "weekday_as_printed": "SUNDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-03-25",
+      "last_day": "2026-03-25",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-03-27",
+      "last_day": "2026-03-27",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-03-28",
+      "last_day": "2026-03-28",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    }
+  ]
+}
