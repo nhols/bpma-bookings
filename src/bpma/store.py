@@ -57,10 +57,14 @@ class Store:
         (folder / f"image{Path(ref.filename).suffix.lower() or '.jpg'}").write_bytes(image)
         _write(folder / "source.json", Source(url=ref.url, filename=ref.filename, first_seen=now))
 
+    def image_name(self, asset_id: str) -> str:
+        """e.g. "image.png": sheets are saved in whatever format they were published in."""
+        return next(self._dir(asset_id).glob("image.*")).name
+
     def image(self, asset_id: str) -> tuple[bytes, str]:
         """The image bytes and their media type, e.g. "image/png"."""
-        path = next(self._dir(asset_id).glob("image.*"))
-        return path.read_bytes(), mimetypes.guess_type(path.name)[0] or "image/jpeg"
+        name = self.image_name(asset_id)
+        return (self._dir(asset_id) / name).read_bytes(), mimetypes.guess_type(name)[0] or "image/jpeg"
 
     def has_extraction(self, asset_id: str) -> bool:
         return (self._dir(asset_id) / "extraction.json").exists()

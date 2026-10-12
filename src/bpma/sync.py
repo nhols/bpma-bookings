@@ -74,7 +74,11 @@ def sync(
         log.info("Same sheets as the last rebuild; nothing to do")
         return None
 
-    all_bookings = [b for asset_id in asset_ids for b in bookings(store.extraction(asset_id).sheet, asset_id)]
+    all_bookings = [
+        b
+        for asset_id in asset_ids
+        for b in bookings(store.extraction(asset_id).sheet, asset_id, store.image_name(asset_id))
+    ]
     plan = make_plan(calendar.events_starting_after(now), all_bookings, now)
     log.info("Plan: delete %d future events, create %d", len(plan.delete), len(plan.create))
     if dry_run:

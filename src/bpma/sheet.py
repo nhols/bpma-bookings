@@ -44,6 +44,7 @@ class Booking(BaseModel):
     title: str
     time_as_printed: str
     sheet_id: str
+    image_name: str  # e.g. "image.png", in data/sheets/<sheet_id>/
 
     @property
     def starts_at(self) -> dt.datetime:
@@ -72,7 +73,7 @@ def problems(sheet: Sheet) -> list[str]:
     return found
 
 
-def bookings(sheet: Sheet, sheet_id: str) -> list[Booking]:
+def bookings(sheet: Sheet, sheet_id: str, image_name: str) -> list[Booking]:
     """Turn a sheet into calendar bookings: one per day per time slot, or one all-day booking if there are no times."""
     result: list[Booking] = []
     for row in sheet.rows:
@@ -84,6 +85,15 @@ def bookings(sheet: Sheet, sheet_id: str) -> list[Booking]:
         day = row.first_day
         while day <= row.last_day:
             for slot in slots:
-                result.append(Booking(day=day, slot=slot, title=title, time_as_printed=printed, sheet_id=sheet_id))
+                result.append(
+                    Booking(
+                        day=day,
+                        slot=slot,
+                        title=title,
+                        time_as_printed=printed,
+                        sheet_id=sheet_id,
+                        image_name=image_name,
+                    )
+                )
             day += dt.timedelta(days=1)
     return result

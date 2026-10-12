@@ -18,7 +18,7 @@ OCTOBER = sheet(
 
 
 def booking(day: str) -> Booking:
-    [result] = bookings(sheet(row(day, ("10:00", "11:00"))), "old-sheet")
+    [result] = bookings(sheet(row(day, ("10:00", "11:00"))), "old-sheet", "image.jpg")
     return result
 
 
