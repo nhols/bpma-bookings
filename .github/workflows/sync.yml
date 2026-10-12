@@ -25,7 +25,7 @@ jobs:
       contents: write # commit new sheets and runs to data/
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0
 
       - name: Update the calendar from the booking sheets
         run: uv run --locked bpma sync ${{ inputs.force && '--force' || '' }}
