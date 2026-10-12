@@ -1,0 +1,70 @@
+{
+  "title": "Athletics Track Bookings January 2026",
+  "rows": [
+    {
+      "first_day": "2026-01-14",
+      "last_day": "2026-01-14",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "EVE",
+      "slots": [
+        {
+          "start": "17:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-01-27",
+      "last_day": "2026-01-27",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "AM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "12:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-01-28",
+      "last_day": "2026-01-28",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "PM-EVE",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-01-29",
+      "last_day": "2026-01-29",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "AM-PM",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-01-30",
+      "last_day": "2026-01-30",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "6-8PM",
+      "slots": [
+        {
+          "start": "18:00:00",
+          "end": "20:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE USE TRACK BOOKING"
+    }
+  ]
+}

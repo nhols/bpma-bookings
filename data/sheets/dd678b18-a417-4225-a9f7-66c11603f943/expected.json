@@ -1,0 +1,135 @@
+{
+  "title": "Athletics Track Bookings April 2026",
+  "rows": [
+    {
+      "first_day": "2026-04-04",
+      "last_day": "2026-04-04",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-15",
+      "last_day": "2026-04-15",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-17",
+      "last_day": "2026-04-18",
+      "weekday_as_printed": "FRIDAY - SATURDAY",
+      "time_as_printed": "ALL DAY & EVE",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-22",
+      "last_day": "2026-04-22",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "ALL DAY & EVE",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-23",
+      "last_day": "2026-04-23",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "PM",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-24",
+      "last_day": "2026-04-24",
+      "weekday_as_printed": "FRIDAY",
+      "time_as_printed": "PM",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "17:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-25",
+      "last_day": "2026-04-25",
+      "weekday_as_printed": "SATURDAY",
+      "time_as_printed": "ALL DAY & EVE",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-28",
+      "last_day": "2026-04-28",
+      "weekday_as_printed": "TUESDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-29",
+      "last_day": "2026-04-29",
+      "weekday_as_printed": "WEDNESDAY",
+      "time_as_printed": "PM & EVE",
+      "slots": [
+        {
+          "start": "13:00:00",
+          "end": "21:00:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    },
+    {
+      "first_day": "2026-04-30",
+      "last_day": "2026-04-30",
+      "weekday_as_printed": "THURSDAY",
+      "time_as_printed": "ALL DAY",
+      "slots": [
+        {
+          "start": "08:30:00",
+          "end": "16:30:00"
+        }
+      ],
+      "event_type": "EXCLUSIVE TRACK BOOKING"
+    }
+  ]
+}
