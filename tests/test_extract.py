@@ -28,6 +28,15 @@ def test_a_misreading_is_corrected_after_one_double_check() -> None:
     assert len(calls) == 2
     assert extraction.sheet == RIGHT
     assert extraction.problems == []
+    [retry] = extraction.retries  # recorded, so the sync can tell you about it
+    assert "is a Monday" in retry
+
+
+def test_a_good_first_reading_has_no_retries() -> None:
+    model, calls = model_reading(RIGHT)
+    extraction = extract(b"image", "image/jpeg", model=model)
+    assert len(calls) == 1
+    assert extraction.retries == []
 
 
 def test_a_sheet_that_is_itself_wrong_is_accepted_after_one_double_check() -> None:

@@ -29,6 +29,7 @@ class Extraction(BaseModel):
     model: str  # the model that actually answered
     extracted_at: dt.datetime
     sheet: Sheet
+    retries: list[str] = []  # why the model was asked to read the sheet again, if it was
     problems: list[str] = []  # anything that still looked wrong after the model double-checked
 
 
@@ -39,6 +40,7 @@ class Run(BaseModel):
     sheets: list[str]  # asset ids on the page
     deleted: list[Event]
     created: list[Event]
+    notes: list[str] = []  # what's worth telling a person, as Markdown
 
 
 @dataclass(frozen=True)

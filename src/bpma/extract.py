@@ -4,6 +4,7 @@ import datetime as dt
 import os
 
 from pydantic_ai import Agent, BinaryContent, ModelRetry, RunContext
+from pydantic_ai.messages import ModelMessage, ModelRequest, RetryPromptPart
 from pydantic_ai.models import Model
 from pydantic_ai.models.fallback import FallbackModel
 
@@ -61,5 +62,22 @@ def extract(image: bytes, media_type: str, model: str | Model | None = None) -> 
         model=result.response.model_name or "unknown",
         extracted_at=dt.datetime.now(dt.UTC),
         sheet=result.output,
+        retries=retry_reasons(result.all_messages()),
         problems=problems(result.output),
     )
+
+
+def retry_reasons(messages: list[ModelMessage]) -> list[str]:
+    """Why the model was asked to try again: our double-check, or a reading that didn't fit the Sheet schema."""
+    reasons: list[str] = []
+    for message in messages:
+        if not isinstance(message, ModelRequest):
+            continue
+        for part in message.parts:
+            if not isinstance(part, RetryPromptPart):
+                continue
+            if isinstance(part.content, str):
+                reasons.append(part.content)
+            else:
+                reasons.append("The reading didn't fit the schema: " + "; ".join(e["msg"] for e in part.content))
+    return reasons

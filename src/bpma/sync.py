@@ -10,9 +10,9 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Protocol
 
-from bpma.gcal import Event
+from bpma.gcal import IMAGES, Event
 from bpma.page import SheetRef
-from bpma.sheet import Booking, bookings
+from bpma.sheet import LONDON, Booking, bookings
 from bpma.store import Extraction, Run, Store
 
 log = logging.getLogger(__name__)
@@ -58,6 +58,7 @@ def sync(
     if not sheets:
         raise NoSheetsError("No booking sheets found on the page")
 
+    notes: list[str] = []
     for ref in sheets:
         if not store.has_image(ref.asset_id):
             log.info("New sheet: %s", ref.filename)
@@ -67,6 +68,7 @@ def sync(
             if extraction.problems:
                 log.warning("%s may be wrong on the sheet itself: %s", ref.filename, extraction.problems)
             store.save_extraction(ref.asset_id, extraction)
+            notes += sheet_notes(ref, store.image_name(ref.asset_id), extraction)
 
     asset_ids = [ref.asset_id for ref in sheets]
     last = store.last_run()
@@ -92,6 +94,31 @@ def sync(
     for event in plan.delete:
         calendar.delete(event)
     created = [calendar.create(booking) for booking in plan.create]
-    run = Run(ran_at=now, sheets=asset_ids, deleted=plan.delete, created=created)
+    run = Run(ran_at=now, sheets=asset_ids, deleted=plan.delete, created=created, notes=notes)
+    run.notes += change_notes(run.deleted, run.created)
     store.save_run(run)
     return run
+
+
+def sheet_notes(ref: SheetRef, image_name: str, extraction: Extraction) -> list[str]:
+    """A newly read sheet, and anything that made the model look twice."""
+    notes = [f"New sheet: [{ref.filename}]({IMAGES}/{ref.asset_id}/{image_name}), read by {extraction.model}."]
+    for reason in extraction.retries:
+        notes.append("The model was asked to read it again:\n```\n" + reason + "\n```")
+    if extraction.problems:
+        notes.append(
+            "Still looked wrong after the double-check, so check the sheet:\n- " + "\n- ".join(extraction.problems)
+        )
+    return notes
+
+
+def change_notes(deleted: list[Event], created: list[Event]) -> list[str]:
+    """What the rebuild changed, ignoring events that were deleted and recreated the same."""
+    before = {(e.starts_at, e.summary) for e in deleted}
+    after = {(e.starts_at, e.summary) for e in created}
+    lines = [("-", *key) for key in before - after] + [("+", *key) for key in after - before]
+    if not lines:
+        return []
+    lines.sort(key=lambda line: (line[1], line[0] == "+"))  # by time, removed before added
+    diff = "\n".join(f"{sign} {when.astimezone(LONDON):%a %d %b %Y %H:%M}  {summary}" for sign, when, summary in lines)
+    return [f"Calendar changes:\n```diff\n{diff}\n```"]

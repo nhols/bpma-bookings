@@ -18,6 +18,7 @@ def main() -> None:
     sync_command = commands.add_parser("sync", help="Check the page and update the calendar if the sheets changed.")
     sync_command.add_argument("--dry-run", action="store_true", help="Show what would change without changing it.")
     sync_command.add_argument("--force", action="store_true", help="Rebuild future events even if nothing changed.")
+    sync_command.add_argument("--notes", type=Path, help="Write anything worth telling a person to this file.")
     extract_command = commands.add_parser("extract", help="Read one sheet image and print the result.")
     extract_command.add_argument("image", type=Path)
     extract_command.add_argument("--model", help="e.g. google:gemini-3.5-flash")
@@ -38,6 +39,8 @@ def main() -> None:
         )
         if run:
             print(f"Rebuilt the calendar: deleted {len(run.deleted)} future events, created {len(run.created)}.")
+        if run and run.notes and args.notes:
+            args.notes.write_text("\n\n".join(run.notes) + "\n")
     elif args.command == "extract":
         image: Path = args.image
         media_type = "image/png" if image.suffix.lower() == ".png" else "image/jpeg"

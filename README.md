@@ -42,6 +42,9 @@ data/sheets/<asset_id>/   image.jpg, source.json (where and when it was found), 
 data/runs/<time>.json     each rebuild: the events deleted and created
 ```
 
+When a new sheet appears, the calendar changes, or the model had to read a sheet twice, the workflow comments on
+its `data/` commit and @mentions you, so you get a GitHub notification with the details.
+
 Only one sync runs at a time, and only the schedule or the repo owner can start one. If a sync fails, GitHub
 emails you and the next run starts again cleanly. If the page has no sheets at all, the sync fails rather than
 emptying the calendar. A keepalive job stops GitHub disabling the schedule during quiet months.

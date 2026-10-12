@@ -28,7 +28,7 @@ jobs:
       - uses: astral-sh/setup-uv@v10.2.0
 
       - name: Update the calendar from the booking sheets
-        run: uv run --locked bpma sync ${{ inputs.force && '--force' || '' }}
+        run: uv run --locked bpma sync --notes notes.md ${{ inputs.force && '--force' || '' }}
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -42,6 +42,17 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           git diff --cached --quiet || { git commit -m "data: sync on $(date -u +%F) [skip ci]" && git push; }
+
+      # A new sheet, a change to the calendar, or a reading the model had to retry: comment on the data commit,
+      # mentioning the repo owner so GitHub sends them a notification. Nothing is left open.
+      - name: Tell the owner what changed
+        if: hashFiles('notes.md') != ''
+        continue-on-error: true # a missed note shouldn't fail the sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          { echo "@${{ github.repository_owner }}"; echo; cat notes.md; } > comment.md
+          gh api "repos/${{ github.repository }}/commits/$(git rev-parse HEAD)/comments" -F body=@comment.md
 
   # GitHub turns off scheduled workflows in public repos after 60 days without activity, and the track can go
   # months without a new sheet. Re-enabling the workflow resets that clock (as liskin/gh-workflow-keepalive does).
