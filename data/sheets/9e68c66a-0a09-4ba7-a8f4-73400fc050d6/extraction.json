@@ -1,0 +1,140 @@
+{
+  "model": "gemini-3.8-flash",
+  "extracted_at": "2026-10-12T20:29:42.339759Z",
+  "sheet": {
+    "title": "Athletics Track Bookings October 2026",
+    "rows": [
+      {
+        "first_day": "2026-10-13",
+        "last_day": "2026-10-13",
+        "weekday_as_printed": "TUESDAY",
+        "time_as_printed": "12 - 6:30pm",
+        "slots": [
+          {
+            "start": "12:00:00",
+            "end": "18:30:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-14",
+        "last_day": "2026-10-14",
+        "weekday_as_printed": "WEDNESDAY",
+        "time_as_printed": "9 - 11AM",
+        "slots": [
+          {
+            "start": "09:00:00",
+            "end": "11:00:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-17",
+        "last_day": "2026-10-17",
+        "weekday_as_printed": "SATURDAY",
+        "time_as_printed": "AM - PM",
+        "slots": [
+          {
+            "start": "08:30:00",
+            "end": "17:00:00"
+          }
+        ],
+        "event_type": "RUN THROUGH"
+      },
+      {
+        "first_day": "2026-10-18",
+        "last_day": "2026-10-18",
+        "weekday_as_printed": "SUNDAY",
+        "time_as_printed": "AM",
+        "slots": [
+          {
+            "start": "08:30:00",
+            "end": "12:30:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-19",
+        "last_day": "2026-10-19",
+        "weekday_as_printed": "MONDAY",
+        "time_as_printed": "6 - 8PM",
+        "slots": [
+          {
+            "start": "18:00:00",
+            "end": "20:00:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-20",
+        "last_day": "2026-10-20",
+        "weekday_as_printed": "TUESDAY",
+        "time_as_printed": "AM",
+        "slots": [
+          {
+            "start": "08:30:00",
+            "end": "12:30:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-23",
+        "last_day": "2026-10-23",
+        "weekday_as_printed": "FRIDAY",
+        "time_as_printed": "3 - 7PM",
+        "slots": [
+          {
+            "start": "15:00:00",
+            "end": "19:00:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-24",
+        "last_day": "2026-10-24",
+        "weekday_as_printed": "SATURDAY",
+        "time_as_printed": "ALL DAY",
+        "slots": [
+          {
+            "start": "08:30:00",
+            "end": "16:30:00"
+          }
+        ],
+        "event_type": "RUN THROUGH"
+      },
+      {
+        "first_day": "2026-10-25",
+        "last_day": "2026-10-25",
+        "weekday_as_printed": "SUNDAY",
+        "time_as_printed": "4:30 - 6:30 PM",
+        "slots": [
+          {
+            "start": "16:30:00",
+            "end": "18:30:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      },
+      {
+        "first_day": "2026-10-29",
+        "last_day": "2026-10-29",
+        "weekday_as_printed": "THURSDAY",
+        "time_as_printed": "ALL DAY",
+        "slots": [
+          {
+            "start": "08:30:00",
+            "end": "16:30:00"
+          }
+        ],
+        "event_type": "EXCLUSIVE TRACK BOOKING"
+      }
+    ]
+  },
+  "problems": []
+}
