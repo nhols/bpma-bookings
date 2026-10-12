@@ -121,18 +121,22 @@ def test_a_rebuild_notes_the_new_sheet_and_what_changed_in_the_calendar(tmp_path
     run = run_sync(tmp_path, calendar, Page({"oct-v2": amended}), now=NOW + dt.timedelta(hours=1))
 
     assert run is not None
-    new_sheet, changes = run.notes
+    new_sheet, counts, changes = run.notes
     assert new_sheet.startswith("New sheet: [oct-v2.jpg](https://raw.githubusercontent.com/")
+    assert counts == "Rebuilt the calendar: deleted 2 future events, created 2."
     assert changes.splitlines()[2:4] == [
         "- Thu 29 Oct 2026 08:30  Exclusive track booking",
         "+ Thu 29 Oct 2026 09:00  Exclusive track booking",
     ]
 
 
-def test_a_rebuild_that_changes_nothing_has_nothing_to_say(tmp_path: Path) -> None:
+def test_a_rebuild_that_changes_no_bookings_still_reports_the_counts(tmp_path: Path) -> None:
     calendar, page = FakeCalendar(), Page({"oct": OCTOBER})
     run_sync(tmp_path, calendar, page)
 
     run = run_sync(tmp_path, calendar, page, force=True)
     assert run is not None
-    assert run.notes == []
+    assert run.notes == [
+        "Rebuilt the calendar: deleted 2 future events, created 2.",
+        "No bookings changed: every event was recreated as it was.",
+    ]

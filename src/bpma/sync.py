@@ -113,12 +113,13 @@ def sheet_notes(ref: SheetRef, image_name: str, extraction: Extraction) -> list[
 
 
 def change_notes(deleted: list[Event], created: list[Event]) -> list[str]:
-    """What the rebuild changed, ignoring events that were deleted and recreated the same."""
+    """How many events the rebuild deleted and created, and which bookings actually changed."""
+    notes = [f"Rebuilt the calendar: deleted {len(deleted)} future events, created {len(created)}."]
     before = {(e.starts_at, e.summary) for e in deleted}
     after = {(e.starts_at, e.summary) for e in created}
     lines = [("-", *key) for key in before - after] + [("+", *key) for key in after - before]
     if not lines:
-        return []
+        return [*notes, "No bookings changed: every event was recreated as it was."]
     lines.sort(key=lambda line: (line[1], line[0] == "+"))  # by time, removed before added
     diff = "\n".join(f"{sign} {when.astimezone(LONDON):%a %d %b %Y %H:%M}  {summary}" for sign, when, summary in lines)
-    return [f"Calendar changes:\n```diff\n{diff}\n```"]
+    return [*notes, f"Bookings that changed:\n```diff\n{diff}\n```"]

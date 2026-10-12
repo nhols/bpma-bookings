@@ -43,8 +43,8 @@ jobs:
           git add data
           git diff --cached --quiet || { git commit -m "data: sync on $(date -u +%F) [skip ci]" && git push; }
 
-      # A new sheet, a change to the calendar, or a reading the model had to retry: comment on the data commit,
-      # mentioning the repo owner so GitHub sends them a notification. Nothing is left open.
+      # After every rebuild, comment on the data commit with what happened (new sheets, model retries, events
+      # deleted and created), mentioning the repo owner so GitHub emails them.
       - name: Tell the owner what changed
         if: hashFiles('notes.md') != ''
         continue-on-error: true # a missed note shouldn't fail the sync
